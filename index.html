@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to AJAX</title>
+</head>
+<body>
+    <h1>AJAX API Call</h1>
+    <p>
+        This is a test.
+    </p>
+    <script>
+    const callAjaxRequest = () => {
+        // step 1: Setup our request
+        const xhr = new XMLHttpRequest();
+
+        // Step 2: Create a function to deal with the response when it's donde
+        xhr.onload = () => {
+            console.log(xhr.responseText)
+        }
+        xhr.onerror = () => {
+            alert('There was an error')
+        }
+
+        // Step 3: Open and send our request
+        xhr.open('GET','https://jsonplaceholder.typicode.com/todos/1')    
+        xhr.send()
+    }
+    </script>
+</body>
+</html>
