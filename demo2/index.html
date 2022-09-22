@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APOD - Astronomy Picture Of the Day</title>
+    <style>
+    img {
+        max-width: 100%;
+    }
+    .apod_wrapper {
+        width: 720px;
+        border: 1px solid #0B3D91;
+        padding: 30px;
+        margin: 30px 0 5px 0;
+    }
+    .apod_title {
+        margin: 30px 0 5px 0;
+    }
+    .apod_author {
+        font-style: italic;
+        margin: 0;
+    }
+    .apod_description {
+        text-align: justify;
+    }
+    .apod_image {
+        padding: 15px 0;
+    }
+    .apod_image img {
+        border-radius: 5px;
+    }        
+    </style>
+</head>
+<body>
+    <div class="intro">
+        <h1>APOD - Astronomy Picture Of the Day</h1>
+        <p>The data source of this API is powered by The National Aeronautics and Space Administration (NASA).</p>
+    </div>
+    <div class="main">
+        <h2>Picture of the day search</h2>
+        <div class="apod_finder">
+            <form class="apod_finder_form">
+            <label for="date"></label>
+            <input type="date" id="dateInput">
+            <button type="button" id="loadAPODBtn">Search</button>
+            <button type="reset">Reset</button>
+            </form>
+        </div>
+        <div id="apod_info">            
+        </div>
+    </div>
+    <script>
+    // DOM Access
+    const loadAPODBtn = document.getElementById('loadAPODBtn')
+    const dateInput = document.getElementById('dateInput')
+    const apod_info = document.getElementById('apod_info')
+
+    const callAjaxRequest = () => {
+        // step 1: Setup our request
+        const xhr = new XMLHttpRequest()
+
+        // Step 2: Create a function to deal with the response when it's done
+        xhr.onload = () => {
+            console.log(xhr.responseText)
+            loadAPOD(JSON.parse(xhr.responseText))
+        }
+        xhr.onerror = () => {
+            alert('There was an error')
+        }
+
+        // Step 3: Open and send our request
+        const api_url = 'https://api.nasa.gov/planetary/apod?api_key='
+        const api_key = 'DEMO_KEY'
+        const params = (dateInput.value != '') ? `&date=${dateInput.value}` : ''
+        xhr.open('GET', `${api_url}${api_key}${params}`)
+        xhr.send()
+    }
+    // Load APOD data on the page
+    const loadAPOD = (apo_data) => {
+        const apo_html = `<div class="apod_wrapper">
+            <h2 class="apod_title">${apo_data.title}</h2>
+            <p class="apod_author">${apo_data.copyright}, ${apo_data.date}</p>
+            <p class="apod_description">${apo_data.explanation}</p>
+            <div class="apod_image"><img src="${apo_data.url}" alt="${apo_data.title}" /></div>
+        </div>`
+        apod_info.innerHTML = `${apo_html}`
+    }
+    // Triggered after clicking the search button
+    loadAPODBtn.addEventListener('click', callAjaxRequest)
+    </script>
+</body>
+</html>
